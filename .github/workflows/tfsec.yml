@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         directory: ["./terraform"]
-        terraform-versions: [0.14.0, latest]
+        terraform-versions: [0.14.0]
     defaults:
       run:
         working-directory: ${{ matrix.directory }}
