@@ -10,7 +10,8 @@ jobs:
       - name: Clone repo
         uses: actions/checkout@master
       - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v1
+        uses: ./ 
+        #hashicorp/setup-terraform@v1
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
@@ -25,9 +26,6 @@ jobs:
         id: plan
         run: terraform plan -no-color
         continue-on-error: true
-        with:
-          github_token: ${{ github.token }}
-          working_directory: ./terraform/
       - name: tfsec
         uses: aquasecurity/tfsec-pr-commenter-action@main
         with:
