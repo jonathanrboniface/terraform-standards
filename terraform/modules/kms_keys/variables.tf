@@ -15,7 +15,7 @@ variable "rotation_period" {
 }
 
 variable "keys" {
-  type        = list
+  type        = list(any)
   description = "List of encryption keys to be created. Example: [{component='app'},{component='db'}] . component value should match the mig/compute-vm description"
 }
 

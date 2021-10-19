@@ -20,9 +20,9 @@ resource "google_compute_instance" "vm" {
   description               = var.instance_description
   tags                      = var.network_tags
   allow_stopping_for_update = true
-  labels                    = merge(var.labels, {
-    resource= "google-compute-instance", 
-    location= var.zones[each.key % length(var.zones)]
+  labels = merge(var.labels, {
+    resource = "google-compute-instance",
+    location = var.zones[each.key % length(var.zones)]
     }
   )
   metadata = {
@@ -109,7 +109,7 @@ resource "google_compute_disk" "vm" {
     resource = "google-compute-engine-disk",
     location = each.value["zone"],
     vss      = each.value["vss"]
-   }
+    }
   )
   lifecycle {
     ignore_changes = [
