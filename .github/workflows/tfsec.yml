@@ -5,13 +5,18 @@ jobs:
   tfsec:
     name: tfsec PR commenter
     runs-on: ubuntu-latest
-
+    strategy:
+      fail-fast: false
+      matrix:
+        directory: ["./terraform"]
+    defaults:
+      run:
+        working-directory: ${{ matrix.directory }}
     steps:
       - name: Clone repo
         uses: actions/checkout@master
       - name: Setup Terraform
-        uses: ./ 
-        #hashicorp/setup-terraform@v1
+        uses: hashicorp/setup-terraform@v1
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
