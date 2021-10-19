@@ -1,5 +1,5 @@
 output "instance_names" {
-  value = [for vm in google_compute_instance.vm : vm.name]
+  value       = [for vm in google_compute_instance.vm : vm.name]
   description = "The name(s) of the compute engine instances"
 }
 

@@ -20,11 +20,11 @@ resource "google_compute_resource_policy" "vm" {
 
     snapshot_properties {
       labels = merge(var.labels, {
-        resource= "google-compute-resource-policy-snapshot-properties",
-        location= var.region
+        resource = "google-compute-resource-policy-snapshot-properties",
+        location = var.region
       })
       storage_locations = ["us"]
-      guest_flush = false
+      guest_flush       = false
     }
   }
 }
@@ -48,11 +48,11 @@ resource "google_compute_resource_policy" "vm_vss" {
 
     snapshot_properties {
       labels = merge(var.labels, {
-        resource= "google-compute-resource-policy-snapshot-properties",
-        location= var.region
+        resource = "google-compute-resource-policy-snapshot-properties",
+        location = var.region
       })
       storage_locations = ["us"]
-      guest_flush = true
+      guest_flush       = true
     }
   }
 }
