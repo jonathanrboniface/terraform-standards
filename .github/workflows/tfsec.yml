@@ -9,28 +9,37 @@ jobs:
       fail-fast: false
       matrix:
         directory: ["./terraform"]
+        terraform-versions: [0.14.0, latest]
     defaults:
       run:
         working-directory: ${{ matrix.directory }}
     steps:
-      - name: Clone repo
+      - name: Checkout
         uses: actions/checkout@master
-      - name: Setup Terraform
+
+      - name: Setup Terraform - ${{ matrix['terraform-versions'] }}
         uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.14.0
+
       - name: Terraform fmt
         id: fmt
         run: terraform fmt -check
         continue-on-error: true
+
       - name: Terraform Init
         id: init
         run: terraform init
+
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color
         continue-on-error: true
+
       - name: tfsec
         uses: aquasecurity/tfsec-pr-commenter-action@main
         with:
