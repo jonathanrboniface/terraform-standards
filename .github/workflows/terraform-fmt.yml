@@ -20,4 +20,14 @@ jobs:
         if: ${{ failure() && steps.fmt-check.outputs.failure-reason == 'check-failed' }}
         run: echo "terraform formatting check failed"
 
+  validate:
+    runs-on: ubuntu-latest
+    name: Validate terraform
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
 
+      - name: terraform validate
+        uses: dflook/terraform-validate@v1
+        with:
+          path: ./terraform/
