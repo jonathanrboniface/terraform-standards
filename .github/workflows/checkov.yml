@@ -12,7 +12,7 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          config_file: ./config.yaml
+          config_file: ./terraform/config.yaml
           # directory: ./terraform/
           # download_external_modules: true 
           # framework: all 
