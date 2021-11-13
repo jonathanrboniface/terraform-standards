@@ -12,14 +12,14 @@ evaluate-variables: true
 #   - sample-dir 
 external-modules-download-path: .terraform 
 framework: all 
-no-guide: true 
+no-guide: false 
 output: cli 
 quiet: true 
 # repo-id: bridgecrew/sample-repo 
 # skip-check: 
 #   - CKV_DOCKER_3 
 #   - CKV_DOCKER_2 
-skip-fixes: true 
+skip-fixes: false 
 # skip-framework: dockerfile 
 skip-suppressions: true 
 soft-fail: true
