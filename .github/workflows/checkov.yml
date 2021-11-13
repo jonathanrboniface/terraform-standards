@@ -25,7 +25,13 @@ jobs:
         id: Bridgecrew
         uses: bridgecrewio/bridgecrew-action@master
         with:
-          config_file: ./terraform/config.yaml
+          output_format: cli
+          directory: ./terraform/
+          quiet: true
+          download_external_modules: true
+          framework: all
+          soft_fail: true
+          # config_file: ./terraform/config.yaml
          # # api-key: ${{ secrets.BRIDGECREW_API_KEY }}
          # directory: ./terraform/
          # check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
