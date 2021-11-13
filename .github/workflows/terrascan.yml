@@ -17,7 +17,7 @@ jobs:
         only_warn: true
         sarif_upload: true
         #non_recursive:
-        #iac_dir:
+        iac_dir: ./terraform/
         #policy_path:
         #skip_rules:
         #config_path:
