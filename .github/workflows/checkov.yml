@@ -1,0 +1,45 @@
+name: Static Code Analysis - Checkov
+on: [push]
+jobs:
+  checkov-job:
+    runs-on: ubuntu-latest
+    name: checkov-action
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@master
+
+      - name: Run Checkov action
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          config_file: ./terraform/config.yaml
+          # directory: ./terraform/
+          # download_external_modules: true 
+          # framework: all 
+          # output_format: cli 
+          # quiet: true
+          # soft_fail: true
+          # compact: true
+
+      # - name: Run Bridgecrew 
+      #   id: Bridgecrew
+      #   uses: bridgecrewio/bridgecrew-action@master
+      #   with:
+      #     output_format: cli
+      #     directory: ./terraform/
+      #     quiet: true
+      #     download_external_modules: true
+      #     framework: all
+      #     soft_fail: true
+          # config_file: ./terraform/config.yaml
+         # # api-key: ${{ secrets.BRIDGECREW_API_KEY }}
+         # directory: ./terraform/
+         # check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
+         # skip_check: CKV_AWS_1 # optional: skip a specific check_id. can be comma separated list
+         # soft_fail: false
+         # framework: terraform # optional: run only on a specific infrastructure {cloudformation,terraform,kubernetes,all}
+         # output_format: cli
+         # quiet: false
+         # external_checks_dir: ./checkov
+         # download_external_modules: true # optional: download external terraform modules from public git repositories and terraform registry
+         # log_level: DEBUG # optional: set log level. Default WARNING

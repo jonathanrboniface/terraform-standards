@@ -63,7 +63,7 @@ variable "ssl_certificate" {
 
 variable "ssl_private_key" {
   type        = string
-  description = "The value of the SSL Certificate Key defined in Terraform Cloud"
+  description = "The value of the SSL Certificate Key defined in Terraform Cloud or locally"
   default     = ""
 }
 
