@@ -21,16 +21,16 @@ jobs:
           # soft_fail: true
           # compact: true
 
-      - name: Run Bridgecrew 
-        id: Bridgecrew
-        uses: bridgecrewio/bridgecrew-action@master
-        with:
-          output_format: cli
-          directory: ./terraform/
-          quiet: true
-          download_external_modules: true
-          framework: all
-          soft_fail: true
+      # - name: Run Bridgecrew 
+      #   id: Bridgecrew
+      #   uses: bridgecrewio/bridgecrew-action@master
+      #   with:
+      #     output_format: cli
+      #     directory: ./terraform/
+      #     quiet: true
+      #     download_external_modules: true
+      #     framework: all
+      #     soft_fail: true
           # config_file: ./terraform/config.yaml
          # # api-key: ${{ secrets.BRIDGECREW_API_KEY }}
          # directory: ./terraform/
