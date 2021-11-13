@@ -22,4 +22,4 @@ quiet: true
 skip-fixes: false 
 # skip-framework: dockerfile 
 skip-suppressions: true 
-soft-fail: false
+soft-fail: true
