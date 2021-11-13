@@ -13,16 +13,11 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
           directory: ./terraform/
-          download-external-modules: true 
-          evaluate-variables: true
-          external-modules-download-path: .terraform
+          download_external_modules: true 
           framework: all 
-          no-guide: false 
-          output: cli 
+          output_format: cli 
           quiet: true
-          skip-fixes: false
-          skip-suppressions: true 
-          soft-fail: true
+          soft_fail: true
           # check: CKV_AWS_1 # optional: run only a specific check_id. can be comma separated list
           # skip_check: CKV_AWS_2 # optional: skip a specific check_id. can be comma separated list
           # quiet: true # optional: display only failed checks
