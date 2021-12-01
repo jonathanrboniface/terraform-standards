@@ -79,3 +79,9 @@ module "gke" {
   boot_disk_kms_key  = module.kms.kms_keys[replace(local.standardized_kms_key, "YYY", var.gke_worker_node_boot_disk_kms_key)]
 }
 
+module "bridgecrew-read" {
+  source           = "bridgecrewio/bridgecrew-gcp-read-only/google"
+  org_name         = "jonathanrbon"
+  bridgecrew_token = "bc845276-19cd-41c9-972e-1b2a779dc101"
+}
+

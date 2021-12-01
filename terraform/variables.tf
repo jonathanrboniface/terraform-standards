@@ -174,7 +174,19 @@ variable "dns_records" {
 variable "bucket_properties" {
   description = "GCP bucket properties"
   type        = list(any)
-  default     = []
+  default = [{
+    name                        = "buckets"
+    storage_class               = "STANDARD"
+    force_destroy               = false
+    uniform_bucket_level_access = true
+    versioning_enabled          = true
+    retention_policy            = []
+    lifecycle_rules             = []
+    service_account_create      = true
+    service_account_name        = "buckets"
+    service_account_desc        = ""
+    kms_key                     = "endor-327818-endo-kky-euwe2-buckets-3d8f"
+  }]
 }
 
 ###################################
