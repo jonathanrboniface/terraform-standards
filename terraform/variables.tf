@@ -209,7 +209,7 @@ variable "bucket_properties" {
 variable "gke_version" {
   type        = string
   description = "Min version of GKE, used for both masters and work nodes"
-  default     = "1.20.9-gke.1001"
+  default     = "1.21.5-gke.1302"
 }
 
 variable "create_gke_cluster" {
