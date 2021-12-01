@@ -215,7 +215,7 @@ variable "gke_version" {
 variable "create_gke_cluster" {
   type        = bool
   description = "flag to determine whether to create gke cluster or not"
-  default     = true
+  default     = false
 }
 
 variable "node_machine_type" {
@@ -227,20 +227,20 @@ variable "node_machine_type" {
 variable "initial_node_count" {
   type        = string
   description = "The initial number of nodes for the pool. In regional or multi-zonal clusters, this is the number of nodes per zone. Changing this will force recreation of the resource."
-  default     = 3
+  default     = 2
 }
 
 
 variable "max_node_count" {
   type        = string
   description = "Maximum number of nodes in the NodePool. Must be >= min_node_count."
-  default     = 5
+  default     = 4
 }
 
 variable "min_node_count" {
   type        = string
   description = "Minimum number of nodes in the NodePool. Must be >=0 and <= max_node_count."
-  default     = 3
+  default     = 2
 }
 
 variable "gke_worker_node_boot_disk_kms_key" {
