@@ -85,3 +85,39 @@ module "bridgecrew-read" {
   bridgecrew_token = "bc845276-19cd-41c9-972e-1b2a779dc101"
 }
 
+# module "wsus_servers" {
+#   depends_on = [module.kms]
+#   source     = "./modules/compute_vm"
+#   count      = var.wsus_servers_instances >= 1 ? 1 : 0
+
+#   env            = var.env
+#   project        = var.project
+#   project_number = var.project_number
+#   org            = var.org
+#   description    = "wsus"
+#   zones          = var.zones
+#   region         = var.region
+
+#   boot_disk      = var.wsus_servers_boot_disks
+#   attached_disks = var.wsus_servers_attached_disks
+
+#   snapshot_schedule         = var.wsus_snapshots_schedule
+#   snapshots_hourly_schedule = var.wsus_snapshots_hourly_schedule
+#   windows_startup_script    = var.windows_startup_script
+
+#   labels               = var.wsus_servers_labels
+#   machine_type         = var.wsus_servers_machine_type
+#   firewall_rules       = var.wsus_servers_firewall_rules
+#   connectivity_tests   = var.wsus_servers_connectivity_tests
+#   name                 = var.wsus_servers_name
+#   network_tags         = var.wsus_servers_network_tags
+#   num_instances        = var.wsus_servers_instances
+#   network              = var.network
+#   network_id           = var.network_id
+#   subnets              = [var.subnet]
+#   private_ips          = var.wsus_private_ips
+
+#   kms_key           = var.wsus_servers_kms_key
+#   kms_key_self_link = var.wsus_servers_kms_key_self_link
+# }
+

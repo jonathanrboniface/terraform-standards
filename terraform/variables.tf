@@ -215,7 +215,7 @@ variable "gke_version" {
 variable "create_gke_cluster" {
   type        = bool
   description = "flag to determine whether to create gke cluster or not"
-  default     = false
+  default     = true
 }
 
 variable "node_machine_type" {
