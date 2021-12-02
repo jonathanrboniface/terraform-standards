@@ -8,3 +8,9 @@ jobs:
           fetch-depth: 0
       - name: Run yor action
         uses: bridgecrewio/yor-action@main
+        with:
+          directory: ./terraform
+          log_level: DEBUG
+          tag: git_modifiers,git_commit,git_repository,yor_trace
+          tag_groups: git
+          output_format: json
