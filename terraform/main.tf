@@ -110,7 +110,7 @@ module "vm_servers" {
   machine_type       = var.machine_type
   firewall_rules     = var.firewall_rules
   connectivity_tests = var.connectivity_tests
-  name               = ""
+  name               = "vm_servers"
   network_tags       = var.network_tags
   num_instances      = var.vm_instances
   network            = module.network_private.name

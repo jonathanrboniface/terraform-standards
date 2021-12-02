@@ -347,19 +347,17 @@ variable "boot_disks" {
 
 variable "attached_disks" {
   type        = list(any)
-  default     = []
   description = "List of Map that have details about attached drives for the microservices DB servers"
+  default = [
+    {
+      name         = "data"
+      disk_size_gb = 100
+      disk_type    = "pd-ssd"
+      source_image = null
+      vss          = false
+    },
+  ]
 }
-
-# variable "network" {
-#   type        = string
-#   description = "The VPC to use for the microservices DB servers"
-# }
-
-# variable "network_id" {
-#   type        = string
-#   description = "The id of the VPC to use for the microservices DB servers"
-# }
 
 variable "labels" {
   type        = map(string)
@@ -378,5 +376,3 @@ variable "enable_vss" {
   type        = bool
   default     = false
 }
-
-
