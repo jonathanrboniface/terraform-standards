@@ -1,3 +1,6 @@
+name: yor
+on:
+  pull_request: 
 jobs:
   yor-job:
     runs-on: ubuntu-latest
@@ -6,5 +9,14 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+          ref: ${{ github.head_ref }}
       - name: Run yor action
         uses: bridgecrewio/yor-action@main
+        # with:
+        #   directory: ./terraform/
+        #   tag_groups: git,code2cloud
+        #   tag: git_commit
+        #   skip_tags: git_modifiers,git_commit,git_repository
+        #   log_level: DEBUG
+        #   output_format: json
+        #   commit_changes: NO

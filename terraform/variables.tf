@@ -199,6 +199,19 @@ variable "bucket_properties" {
       service_account_name        = "bridgecrew-test"
       service_account_desc        = ""
       kms_key                     = "endor-327818-endo-kky-euwe2-buckets-3d8f"
+    },
+    {
+      name                        = "secondary-bridgecrew-test"
+      storage_class               = "STANDARD"
+      force_destroy               = false
+      uniform_bucket_level_access = false
+      versioning_enabled          = false
+      retention_policy            = []
+      lifecycle_rules             = []
+      service_account_create      = true
+      service_account_name        = "bridgecrew-test"
+      service_account_desc        = ""
+      kms_key                     = ""
   }]
 }
 

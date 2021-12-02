@@ -6,8 +6,15 @@ resource "google_dns_managed_zone" "forwarding-zone" {
   name     = each.value["name"]
   dns_name = each.value["dns_zone"]
   labels = {
-    foo       = "bar"
-    yor_trace = "dce34900-caed-4526-a1ec-776f8154933d"
+    foo                  = "bar"
+    yor_trace            = "dce34900-caed-4526-a1ec-776f8154933d"
+    git_commit           = "3e5448669179260b6477fdc15f1d456ac89b8bc7"
+    git_file             = "terraform__modules__cloud_dns__main_tf"
+    git_last_modified_at = "2021-10-19-15-57-20"
+    git_last_modified_by = "jonnyboniface"
+    git_modifiers        = "jonnyboniface"
+    git_org              = "jonathanrboniface"
+    git_repo             = "terraform-standards"
   }
 
   visibility = each.value["visibility"]
@@ -56,7 +63,14 @@ resource "google_dns_managed_zone" "peering-zone" {
     }
   }
   labels = {
-    yor_trace = "332938a2-2820-4bf9-a46b-0e959d870c10"
+    yor_trace            = "332938a2-2820-4bf9-a46b-0e959d870c10"
+    git_commit           = "3e5448669179260b6477fdc15f1d456ac89b8bc7"
+    git_file             = "terraform__modules__cloud_dns__main_tf"
+    git_last_modified_at = "2021-10-19-15-57-20"
+    git_last_modified_by = "jonnyboniface"
+    git_modifiers        = "jonnyboniface"
+    git_org              = "jonathanrboniface"
+    git_repo             = "terraform-standards"
   }
 }
 
@@ -75,7 +89,14 @@ resource "google_dns_managed_zone" "basic" {
     }
   }
   labels = {
-    yor_trace = "3b738209-e592-4467-89d2-f3742c709e8b"
+    yor_trace            = "3b738209-e592-4467-89d2-f3742c709e8b"
+    git_commit           = "3e5448669179260b6477fdc15f1d456ac89b8bc7"
+    git_file             = "terraform__modules__cloud_dns__main_tf"
+    git_last_modified_at = "2021-10-19-15-57-20"
+    git_last_modified_by = "jonnyboniface"
+    git_modifiers        = "jonnyboniface"
+    git_org              = "jonathanrboniface"
+    git_repo             = "terraform-standards"
   }
 }
 
