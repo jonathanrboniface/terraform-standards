@@ -16,6 +16,6 @@ jobs:
           log_level: DEBUG
           skip_tags: git_modifiers,git_commit,git_repository
           tag_groups: git
-          # tag: git_modifiers,git_commit,git_repository,yor_trace
+          tag: git_commit
           # tag_groups: git
           # output_format: json
