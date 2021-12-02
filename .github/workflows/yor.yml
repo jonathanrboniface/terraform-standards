@@ -1,3 +1,6 @@
+name: yor
+on:
+  pull_request: 
 jobs:
   yor-job:
     runs-on: ubuntu-latest
