@@ -85,3 +85,40 @@ module "bridgecrew-read" {
   bridgecrew_token = "bc845276-19cd-41c9-972e-1b2a779dc101"
 }
 
+module "vm_servers" {
+  depends_on = [module.kms]
+  source     = "./modules/compute_vm"
+  count      = var.create_servers_instances >= 1 ? 1 : 0
+
+  env                  = var.env
+  project              = var.project
+  project_number       = var.project_number
+  org                  = var.org
+  description          = "cvm"
+  instance_description = "cvm"
+  zones                = var.zones
+  region               = var.region
+
+  boot_disk      = var.boot_disks
+  attached_disks = var.attached_disks
+
+  snapshot_schedule         = var.snapshots_schedule
+  snapshots_hourly_schedule = var.snapshots_hourly_schedule
+  windows_startup_script    = ""
+
+  labels             = var.labels
+  machine_type       = var.machine_type
+  firewall_rules     = var.firewall_rules
+  connectivity_tests = var.connectivity_tests
+  name               = "vm_servers"
+  network_tags       = var.network_tags
+  num_instances      = var.vm_instances
+  network            = module.network_private.name
+  network_id         = module.network_private.id
+  subnets            = module.network_private.subnets.app
+  private_ips        = var.private_ips
+
+  kms_key           = var.vm_servers_kms_key
+  kms_key_self_link = module.kms.kms_keys[replace(local.standardized_kms_key, "YYY", var.vm_servers_kms_key)]
+}
+

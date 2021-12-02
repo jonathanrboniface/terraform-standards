@@ -186,6 +186,19 @@ variable "bucket_properties" {
     service_account_name        = "buckets"
     service_account_desc        = ""
     kms_key                     = "endor-327818-endo-kky-euwe2-buckets-3d8f"
+    },
+    {
+      name                        = "bridgecrew"
+      storage_class               = "STANDARD"
+      force_destroy               = false
+      uniform_bucket_level_access = false
+      versioning_enabled          = false
+      retention_policy            = []
+      lifecycle_rules             = []
+      service_account_create      = true
+      service_account_name        = "bridgecrew-test"
+      service_account_desc        = ""
+      kms_key                     = "endor-327818-endo-kky-euwe2-buckets-3d8f"
   }]
 }
 
@@ -196,7 +209,7 @@ variable "bucket_properties" {
 variable "gke_version" {
   type        = string
   description = "Min version of GKE, used for both masters and work nodes"
-  default     = "1.20.9-gke.1001"
+  default     = "1.21.5-gke.1302"
 }
 
 variable "create_gke_cluster" {
@@ -214,20 +227,19 @@ variable "node_machine_type" {
 variable "initial_node_count" {
   type        = string
   description = "The initial number of nodes for the pool. In regional or multi-zonal clusters, this is the number of nodes per zone. Changing this will force recreation of the resource."
-  default     = 3
+  default     = 2
 }
-
 
 variable "max_node_count" {
   type        = string
   description = "Maximum number of nodes in the NodePool. Must be >= min_node_count."
-  default     = 5
+  default     = 4
 }
 
 variable "min_node_count" {
   type        = string
   description = "Minimum number of nodes in the NodePool. Must be >=0 and <= max_node_count."
-  default     = 3
+  default     = 2
 }
 
 variable "gke_worker_node_boot_disk_kms_key" {
@@ -239,5 +251,128 @@ variable "gke_worker_node_boot_disk_kms_key" {
 variable "run_windows_startup_script" {
   type        = bool
   description = "Whether to run the windows startup script"
+  default     = false
+}
+
+
+
+###################################
+# VM Variables
+###################################
+
+variable "create_servers_instances" {
+  type        = number
+  description = "flag to determine whether to create VM instances or not"
+  default     = 0
+}
+
+variable "vm_instances" {
+  type        = number
+  description = "flag to determine whether to create VM instances or not"
+  default     = 0
+}
+
+variable "vm_servers_kms_key" {
+  type        = string
+  description = "Name of the KMS key component used for encrypting boot disk of GKE worker nodes. Remember this value is not a KMS self link. Actual Self link value is constructed here"
+  default     = "elk"
+}
+
+variable "firewall_rules" {
+  description = "Firewall rules containing protocol and port list"
+  type        = list(any)
+  default     = []
+}
+
+variable "connectivity_tests" {
+  description = "connectivity_tests"
+  type        = list(any)
+  default     = []
+}
+
+variable "snapshots_hourly_schedule" {
+  description = "The boolean value to determine if an hourly snapshot schedule should be created"
+  type        = bool
+  default     = false
+}
+
+variable "snapshots_schedule" {
+  description = "The values for each of the daily and hourly snapshots and retention policies"
+  type        = list(any)
+  default = [
+    {
+      hourly_schedule = [{
+        hours_in_cycle = 1,
+        start_time     = "00:00",
+      }],
+      hourly_retention_policy = [{
+        max_retention_days    = 7,
+        on_source_disk_delete = "KEEP_AUTO_SNAPSHOTS"
+      }],
+      daily_schedule = [{
+        days_in_cycle = 1,
+        start_time    = "00:00",
+      }],
+      daily_retention_policy = [{
+        max_retention_days    = 7,
+        on_source_disk_delete = "KEEP_AUTO_SNAPSHOTS"
+      }]
+    },
+  ]
+}
+
+variable "private_ips" {
+  type        = list(any)
+  description = "The private_ips to use for the microservices DB servers"
+  default     = []
+}
+
+variable "network_tags" {
+  type        = list(string)
+  description = "A list of network tags to attach to the servers."
+  default     = ["vms"]
+}
+
+variable "boot_disks" {
+  type        = list(any)
+  description = "List of Map that have details about the boot disk fir the microservices DB servers"
+  default = [
+    { name         = "boot"
+      disk_size_gb = 100
+      disk_type    = "pd-ssd"
+      source_image = "windows-2016"
+      vss          = false
+  }]
+}
+
+variable "attached_disks" {
+  type        = list(any)
+  description = "List of Map that have details about attached drives for the microservices DB servers"
+  default = [
+    {
+      name         = "data"
+      disk_size_gb = 100
+      disk_type    = "pd-ssd"
+      source_image = null
+      vss          = false
+    },
+  ]
+}
+
+variable "labels" {
+  type        = map(string)
+  description = " A map of key/value label pairs to assign to the instance."
+  default     = { component : "vms" }
+}
+
+variable "machine_type" {
+  type        = string
+  description = "The machine type to create for the jump servers. Custom machine types can be formatted as custom-NUMBER_OF_CPUS-AMOUNT_OF_MEMORY_MB, e.g. custom-6-20480 for 6 vCPU and 20GB of RAM"
+  default     = "e2-standard-2"
+}
+
+variable "enable_vss" {
+  description = "The boolean value determining if VSS (Volume Shadow Snapshots) should be enabled or not. Default to 'false'"
+  type        = bool
   default     = false
 }

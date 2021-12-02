@@ -22,6 +22,7 @@ locals {
   standarized_connectivity_test      = "${local.org}-${local.project}-${local.env}-nct-${local.location}-YYY-${local.uuid}"
   name_prefix                        = local.standardized_compute_instance
   name_ids                           = range(1, var.num_instances + 1)
+  vm_schedule_policy                 = "${local.org}-${local.project}-${local.env}-vm-schedule-policy"
 
   disks_flattened = flatten([
     for name_id in local.name_ids : [
@@ -32,6 +33,20 @@ locals {
         disk_type    = disk.disk_type,
         source_image = disk.source_image,
         vss          = disk.vss != false ? disk.vss : false
+        zone         = element(var.zones, (name_id - 1))
+      }
+    ]
+  ])
+
+  boot_disks_flattened = flatten([
+    for name_id in local.name_ids : [
+      for disk in var.boot_disk : {
+        vm_id        = name_id,
+        name         = disk.name,
+        disk_size_gb = disk.disk_size_gb,
+        disk_type    = disk.disk_type,
+        source_image = disk.source_image,
+        vss          = var.enable_vss
         zone         = element(var.zones, (name_id - 1))
       }
     ]

@@ -12,11 +12,27 @@ output "disks" {
 }
 
 output "snapshot_schedule" {
-  value       = [google_compute_resource_policy.vm.snapshot_schedule_policy.*.schedule]
+  value = {
+    for vm_snapshot in google_compute_resource_policy.vm :
+    vm_snapshot.id => vm_snapshot.snapshot_schedule_policy.*.schedule
+    if var.snapshots_hourly_schedule == false
+  }
   description = "snapshot schedule for compute disks"
 }
 
+output "vm_schedule" {
+  value = {
+    for instance_schedule_policy in google_compute_resource_policy.vm_schedule :
+    instance_schedule_policy.id => instance_schedule_policy.instance_schedule_policy
+  }
+  description = "instance schedule for start and stop"
+}
+
 output "retention_policy" {
-  value       = [google_compute_resource_policy.vm.snapshot_schedule_policy.*.retention_policy]
+  value = {
+    for snapshot_schedule_policy in google_compute_resource_policy.vm :
+    snapshot_schedule_policy.id => snapshot_schedule_policy.snapshot_schedule_policy.*.retention_policy
+    if var.snapshots_hourly_schedule == false
+  }
   description = "retention policy for compute disks"
 }
