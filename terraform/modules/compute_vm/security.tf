@@ -49,4 +49,7 @@ resource "google_network_management_connectivity_test" "to_vm" {
   }
 
   protocol = lookup(var.connectivity_tests[each.value], "protocol", 0)
+  labels = {
+    yor_trace = "5c7d73d9-8a57-4bd3-8028-154721e39690"
+  }
 }
