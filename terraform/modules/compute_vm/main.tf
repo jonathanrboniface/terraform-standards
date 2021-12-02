@@ -24,7 +24,9 @@ resource "google_compute_instance" "vm" {
     resource = "google-compute-instance",
     location = var.zones[each.key % length(var.zones)]
     }
-  )
+    , {
+      yor_trace = "38960cba-2f3f-4538-8bdd-94c0f93dca0b"
+  })
   metadata = {
     windows-startup-script-ps1 = (length(local.oscheck) >= 1) ? var.windows_startup_script : null
   }
@@ -110,7 +112,9 @@ resource "google_compute_disk" "vm" {
     location = each.value["zone"],
     vss      = each.value["vss"]
     }
-  )
+    , {
+      yor_trace = "a26e1168-a76a-4007-8473-aade947764a6"
+  })
   lifecycle {
     ignore_changes = [
     snapshot]

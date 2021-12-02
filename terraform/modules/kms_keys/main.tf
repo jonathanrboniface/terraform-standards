@@ -17,4 +17,7 @@ resource "google_kms_crypto_key" "key" {
   lifecycle {
     prevent_destroy = true
   }
+  labels = {
+    yor_trace = "a794d606-1652-4129-9922-d267049e6d3c"
+  }
 }

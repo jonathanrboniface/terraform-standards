@@ -6,7 +6,8 @@ resource "google_dns_managed_zone" "forwarding-zone" {
   name     = each.value["name"]
   dns_name = each.value["dns_zone"]
   labels = {
-    foo = "bar"
+    foo       = "bar"
+    yor_trace = "dce34900-caed-4526-a1ec-776f8154933d"
   }
 
   visibility = each.value["visibility"]
@@ -54,6 +55,9 @@ resource "google_dns_managed_zone" "peering-zone" {
       }
     }
   }
+  labels = {
+    yor_trace = "332938a2-2820-4bf9-a46b-0e959d870c10"
+  }
 }
 
 resource "google_dns_managed_zone" "basic" {
@@ -69,6 +73,9 @@ resource "google_dns_managed_zone" "basic" {
         network_url = networks.value
       }
     }
+  }
+  labels = {
+    yor_trace = "3b738209-e592-4467-89d2-f3742c709e8b"
   }
 }
 

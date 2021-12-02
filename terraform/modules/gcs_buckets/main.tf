@@ -48,6 +48,9 @@ resource "google_storage_bucket" "bucket" {
     }
   }
   depends_on = [google_project_iam_member.default-gcs-permissions]
+  labels = {
+    yor_trace = "ca798b30-4235-4210-9ea6-089282758457"
+  }
 }
 
 resource "google_service_account" "service_account" {
