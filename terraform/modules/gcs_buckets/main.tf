@@ -49,7 +49,14 @@ resource "google_storage_bucket" "bucket" {
   }
   depends_on = [google_project_iam_member.default-gcs-permissions]
   labels = {
-    yor_trace = "ca798b30-4235-4210-9ea6-089282758457"
+    yor_trace            = "ca798b30-4235-4210-9ea6-089282758457"
+    git_commit           = "3e5448669179260b6477fdc15f1d456ac89b8bc7"
+    git_file             = "terraform__modules__gcs_buckets__main_tf"
+    git_last_modified_at = "2021-10-19-15-57-20"
+    git_last_modified_by = "jonnyboniface"
+    git_modifiers        = "jonnyboniface"
+    git_org              = "jonathanrboniface"
+    git_repo             = "terraform-standards"
   }
 }
 
