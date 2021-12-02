@@ -12,7 +12,6 @@ jobs:
       - name: Run yor action
         uses: bridgecrewio/yor-action@main
         with:
-          directory: ./terraform
+          directory: ./terraform/
           log_level: DEBUG
-          tag_groups: git
           output_format: json
