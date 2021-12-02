@@ -230,7 +230,6 @@ variable "initial_node_count" {
   default     = 2
 }
 
-
 variable "max_node_count" {
   type        = string
   description = "Maximum number of nodes in the NodePool. Must be >= min_node_count."
@@ -254,3 +253,130 @@ variable "run_windows_startup_script" {
   description = "Whether to run the windows startup script"
   default     = false
 }
+
+
+
+###################################
+# VM Variables
+###################################
+
+variable "create_servers_instances" {
+  type        = number
+  description = "flag to determine whether to create VM instances or not"
+  default     = 0
+}
+
+variable "vm_instances" {
+  type        = number
+  description = "flag to determine whether to create VM instances or not"
+  default     = 0
+}
+
+variable "vm_servers_kms_key" {
+  type        = string
+  description = "Name of the KMS key component used for encrypting boot disk of GKE worker nodes. Remember this value is not a KMS self link. Actual Self link value is constructed here"
+  default     = "elk"
+}
+
+variable "firewall_rules" {
+  description = "Firewall rules containing protocol and port list"
+  type        = list(any)
+  default     = []
+}
+
+variable "connectivity_tests" {
+  description = "connectivity_tests"
+  type        = list(any)
+  default     = []
+}
+
+variable "snapshots_hourly_schedule" {
+  description = "The boolean value to determine if an hourly snapshot schedule should be created"
+  type        = bool
+  default     = false
+}
+
+variable "snapshots_schedule" {
+  description = "The values for each of the daily and hourly snapshots and retention policies"
+  type        = list(any)
+  default = [
+    {
+      hourly_schedule = [{
+        hours_in_cycle = 1,
+        start_time     = "00:00",
+      }],
+      hourly_retention_policy = [{
+        max_retention_days    = 7,
+        on_source_disk_delete = "KEEP_AUTO_SNAPSHOTS"
+      }],
+      daily_schedule = [{
+        days_in_cycle = 1,
+        start_time    = "00:00",
+      }],
+      daily_retention_policy = [{
+        max_retention_days    = 7,
+        on_source_disk_delete = "KEEP_AUTO_SNAPSHOTS"
+      }]
+    },
+  ]
+}
+
+variable "private_ips" {
+  type        = list(any)
+  description = "The private_ips to use for the microservices DB servers"
+  default     = []
+}
+
+variable "network_tags" {
+  type        = list(string)
+  description = "A list of network tags to attach to the servers."
+  default     = ["vms"]
+}
+
+variable "boot_disks" {
+  type        = list(any)
+  description = "List of Map that have details about the boot disk fir the microservices DB servers"
+  default = [
+    { name         = "boot"
+      disk_size_gb = 100
+      disk_type    = "pd-ssd"
+      source_image = "windows-2016"
+      vss          = false
+  }]
+}
+
+variable "attached_disks" {
+  type        = list(any)
+  default     = []
+  description = "List of Map that have details about attached drives for the microservices DB servers"
+}
+
+# variable "network" {
+#   type        = string
+#   description = "The VPC to use for the microservices DB servers"
+# }
+
+# variable "network_id" {
+#   type        = string
+#   description = "The id of the VPC to use for the microservices DB servers"
+# }
+
+variable "labels" {
+  type        = map(string)
+  description = " A map of key/value label pairs to assign to the instance."
+  default     = { component : "vms" }
+}
+
+variable "machine_type" {
+  type        = string
+  description = "The machine type to create for the jump servers. Custom machine types can be formatted as custom-NUMBER_OF_CPUS-AMOUNT_OF_MEMORY_MB, e.g. custom-6-20480 for 6 vCPU and 20GB of RAM"
+  default     = "e2-standard-2"
+}
+
+variable "enable_vss" {
+  description = "The boolean value determining if VSS (Volume Shadow Snapshots) should be enabled or not. Default to 'false'"
+  type        = bool
+  default     = false
+}
+
+

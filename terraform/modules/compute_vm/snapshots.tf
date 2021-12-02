@@ -2,20 +2,29 @@
 # Snapshots
 #################################################################
 resource "google_compute_resource_policy" "vm" {
-  name   = local.standardized_snapshot_schedule
-  region = var.region
+
+  for_each = toset(keys({ for k, v in var.snapshot_schedule : k => v if var.snapshots_hourly_schedule == false }))
+  name     = local.standardized_snapshot_schedule
+  region   = var.region
 
   snapshot_schedule_policy {
-    schedule {
-      hourly_schedule {
-        hours_in_cycle = var.snapshots_hourly_schedule
-        start_time     = var.snapshots_start_time
+
+    dynamic "schedule" {
+      for_each = var.snapshot_schedule[each.value]["daily_schedule"]
+      content {
+        daily_schedule {
+          days_in_cycle = schedule.value.days_in_cycle
+          start_time    = schedule.value.start_time
+        }
       }
     }
 
-    retention_policy {
-      max_retention_days    = var.snapshots_max_retention_days
-      on_source_disk_delete = "KEEP_AUTO_SNAPSHOTS"
+    dynamic "retention_policy" {
+      for_each = var.snapshot_schedule[each.value]["daily_retention_policy"]
+      content {
+        max_retention_days    = retention_policy.value.max_retention_days
+        on_source_disk_delete = retention_policy.value.on_source_disk_delete
+      }
     }
 
     snapshot_properties {
@@ -23,27 +32,71 @@ resource "google_compute_resource_policy" "vm" {
         resource = "google-compute-resource-policy-snapshot-properties",
         location = var.region
       })
-      storage_locations = ["us"]
-      guest_flush       = false
+      storage_locations = ["eu"]
+      guest_flush       = var.enable_vss
+    }
+  }
+}
+
+resource "google_compute_resource_policy" "vm_hourly" {
+
+  for_each = toset(keys({ for k, v in var.snapshot_schedule : k => v if var.snapshots_hourly_schedule == true }))
+  name     = "${local.standardized_snapshot_schedule}-hourly"
+  region   = var.region
+
+  snapshot_schedule_policy {
+
+    dynamic "schedule" {
+      for_each = var.snapshot_schedule[each.value]["hourly_schedule"]
+      content {
+        hourly_schedule {
+          hours_in_cycle = schedule.value.hours_in_cycle
+          start_time     = schedule.value.start_time
+        }
+      }
+    }
+
+    dynamic "retention_policy" {
+      for_each = var.snapshot_schedule[each.value]["hourly_retention_policy"]
+      content {
+        max_retention_days    = retention_policy.value.max_retention_days
+        on_source_disk_delete = retention_policy.value.on_source_disk_delete
+      }
+    }
+
+    snapshot_properties {
+      labels = merge(var.labels, {
+        resource = "google-compute-resource-policy-snapshot-properties",
+        location = var.region
+      })
+      storage_locations = ["eu"]
+      guest_flush       = var.enable_vss
     }
   }
 }
 
 resource "google_compute_resource_policy" "vm_vss" {
-  name   = local.standardized_snapshot_schedule_vss
-  region = var.region
+  for_each = toset(keys({ for k, v in var.snapshot_schedule : k => v if var.snapshots_hourly_schedule == false }))
+  name     = local.standardized_snapshot_schedule_vss
+  region   = var.region
 
   snapshot_schedule_policy {
-    schedule {
-      hourly_schedule {
-        hours_in_cycle = var.snapshots_hourly_schedule
-        start_time     = var.snapshots_start_time
+    dynamic "schedule" {
+      for_each = var.snapshot_schedule[each.value]["daily_schedule"]
+      content {
+        daily_schedule {
+          days_in_cycle = schedule.value.days_in_cycle
+          start_time    = schedule.value.start_time
+        }
       }
     }
 
-    retention_policy {
-      max_retention_days    = var.snapshots_max_retention_days
-      on_source_disk_delete = "KEEP_AUTO_SNAPSHOTS"
+    dynamic "retention_policy" {
+      for_each = var.snapshot_schedule[each.value]["daily_retention_policy"]
+      content {
+        max_retention_days    = retention_policy.value.max_retention_days
+        on_source_disk_delete = retention_policy.value.on_source_disk_delete
+      }
     }
 
     snapshot_properties {
@@ -51,22 +104,88 @@ resource "google_compute_resource_policy" "vm_vss" {
         resource = "google-compute-resource-policy-snapshot-properties",
         location = var.region
       })
-      storage_locations = ["us"]
-      guest_flush       = true
+      storage_locations = ["eu"]
+      guest_flush       = var.enable_vss
     }
   }
 }
 
+resource "google_compute_resource_policy" "vm_vss_hourly" {
+  for_each = toset(keys({ for k, v in var.snapshot_schedule : k => v if var.snapshots_hourly_schedule == true }))
+  name     = "${local.standardized_snapshot_schedule_vss}-hourly"
+  region   = var.region
+
+  snapshot_schedule_policy {
+    dynamic "schedule" {
+      for_each = var.snapshot_schedule[each.value]["hourly_schedule"]
+      content {
+        hourly_schedule {
+          hours_in_cycle = schedule.value.hours_in_cycle
+          start_time     = schedule.value.start_time
+        }
+      }
+    }
+
+    dynamic "retention_policy" {
+      for_each = var.snapshot_schedule[each.value]["hourly_retention_policy"]
+      content {
+        max_retention_days    = retention_policy.value.max_retention_days
+        on_source_disk_delete = retention_policy.value.on_source_disk_delete
+      }
+    }
+
+    snapshot_properties {
+      labels = merge(var.labels, {
+        resource = "google-compute-resource-policy-snapshot-properties",
+        location = var.region
+      })
+      storage_locations = ["eu"]
+      guest_flush       = var.enable_vss
+    }
+  }
+}
+
+
 resource "google_compute_disk_resource_policy_attachment" "vm-attached" {
-  count = length(var.attached_disks) == 0 ? 0 : length(google_compute_disk.vm)
-  name  = google_compute_disk.vm[count.index].labels["vss"] ? google_compute_resource_policy.vm_vss.name : google_compute_resource_policy.vm.name
-  disk  = google_compute_disk.vm[count.index].name
-  zone  = google_compute_disk.vm[count.index].zone
+  depends_on = [
+    google_compute_disk.vm, google_compute_resource_policy.vm, google_compute_resource_policy.vm_vss,
+    google_compute_resource_policy.vm_hourly, google_compute_resource_policy.vm_vss_hourly
+  ]
+  for_each = { for k, v in local.disks_flattened : k => v if v.name != "boot" && var.snapshots_hourly_schedule == false }
+  name     = each.value["vss"] ? local.standardized_snapshot_schedule_vss : local.standardized_snapshot_schedule
+  disk     = "${local.standardized_compute_instance}-${each.value["vm_id"]}-${each.value["name"]}"
+  zone     = each.value["zone"]
 }
 
 resource "google_compute_disk_resource_policy_attachment" "vm-boot" {
-  count = length(google_compute_instance.vm)
-  name  = var.boot_disk[0].vss ? google_compute_resource_policy.vm_vss.name : google_compute_resource_policy.vm.name
-  disk  = google_compute_instance.vm[count.index].name
-  zone  = google_compute_instance.vm[count.index].zone
+  depends_on = [
+    google_compute_instance.vm, google_compute_resource_policy.vm, google_compute_resource_policy.vm_vss,
+    google_compute_resource_policy.vm_hourly, google_compute_resource_policy.vm_vss_hourly
+  ]
+  for_each = { for k, v in local.boot_disks_flattened : k => v if v.name == "boot" && var.snapshots_hourly_schedule == false }
+  name     = each.value["vss"] ? local.standardized_snapshot_schedule_vss : local.standardized_snapshot_schedule
+  disk     = "${local.standardized_compute_instance}-${each.value["vm_id"]}"
+  zone     = each.value["zone"]
+}
+
+resource "google_compute_disk_resource_policy_attachment" "vm-attached-hourly" {
+  depends_on = [
+    google_compute_disk.vm, google_compute_resource_policy.vm, google_compute_resource_policy.vm_vss,
+    google_compute_resource_policy.vm_hourly, google_compute_resource_policy.vm_vss_hourly
+  ]
+  for_each = { for k, v in local.disks_flattened : k => v if v.name != "boot" && var.snapshots_hourly_schedule == true }
+  name     = google_compute_disk.vm[each.key].labels["vss"] ? "${local.standardized_snapshot_schedule_vss}-hourly" : "${local.standardized_snapshot_schedule}-hourly"
+  disk     = "${local.standardized_compute_instance}-${each.value["vm_id"]}-${each.value["name"]}"
+  zone     = each.value["zone"]
+}
+
+resource "google_compute_disk_resource_policy_attachment" "mig-boot-hourly" {
+  depends_on = [
+    google_compute_instance.vm, google_compute_resource_policy.vm, google_compute_resource_policy.vm_vss,
+    google_compute_resource_policy.vm_hourly, google_compute_resource_policy.vm_vss_hourly
+  ]
+  for_each = { for k, v in local.boot_disks_flattened : k => v if v.name == "boot" && var.snapshots_hourly_schedule == true }
+  name     = each.value["vss"] ? "${local.standardized_snapshot_schedule_vss}-hourly" : "${local.standardized_snapshot_schedule}-hourly"
+  disk     = "${local.standardized_compute_instance}-${each.value["vm_id"]}"
+  zone     = each.value["zone"]
 }

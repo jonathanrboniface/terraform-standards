@@ -142,18 +142,14 @@ variable "attached_disks" {
 }
 
 variable "snapshots_hourly_schedule" {
-  type        = number
-  description = "The policy will execute every nth hour starting at the specified time"
+  description = "The boolean value to determine if an hourly snapshot schedule should be created"
+  type        = bool
+  default     = false
 }
 
-variable "snapshots_start_time" {
-  type        = string
-  description = "Time within the window to start the operations. It must be in an hourly format HH:MM, where HH : [00-23] and MM : [00] GMT. eg: 21:00"
-}
-
-variable "snapshots_max_retention_days" {
-  type        = number
-  description = "Maximum age of the snapshot that is allowed to be kept"
+variable "snapshot_schedule" {
+  description = "The values for each of the daily and hourly snapshots and retention policies"
+  type        = list(any)
 }
 
 variable "external_ip" {
@@ -170,6 +166,12 @@ variable "sole_tenancy" {
 variable "windows_startup_script" {
   type        = string
   description = "The contents of the windows startup script"
+}
+
+variable "enable_vss" {
+  description = "The boolean value determining if VSS (Volume Shadow Snapshots) should be enabled or not. Default to 'false'"
+  type        = bool
+  default     = false
 }
 
 #####################################################
@@ -195,4 +197,23 @@ variable "kms_key" {
 
 variable "kms_key_self_link" {
   type = string
+}
+
+#####################################################
+# vm_schedule
+#####################################################
+variable "vm_schedule_start" {
+  type        = string
+  description = "Schedule for starting instance, using the unix-cron format."
+  default     = ""
+}
+variable "vm_schedule_stop" {
+  type        = string
+  description = "Schedule for stopping instance, using the unix-cron format."
+  default     = ""
+}
+variable "vm_schedule_tz" {
+  type        = string
+  description = "The time zone to be used in interpreting the schedule"
+  default     = "UTC"
 }
