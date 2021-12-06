@@ -347,7 +347,7 @@ variable "private_ips" {
 variable "network_tags" {
   type        = list(string)
   description = "A list of network tags to attach to the servers."
-  default     = ["vms"]
+  default     = ["vms", "test"]
 }
 
 variable "boot_disks" {
@@ -368,7 +368,7 @@ variable "attached_disks" {
   default = [
     {
       name         = "data"
-      disk_size_gb = 100
+      disk_size_gb = 175
       disk_type    = "pd-ssd"
       source_image = null
       vss          = false
