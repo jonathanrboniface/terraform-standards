@@ -14,7 +14,7 @@ jobs:
         uses: bridgecrewio/yor-action@main
         with:
           directory: ./terraform/
-          tag_groups: git,code2cloud
+          tag_groups: git
           tag: git_commit
           skip_tags: git_modifiers,git_commit,git_repository
           log_level: DEBUG
