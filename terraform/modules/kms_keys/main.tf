@@ -18,6 +18,13 @@ resource "google_kms_crypto_key" "key" {
     prevent_destroy = true
   }
   labels = {
-    yor_trace = "a794d606-1652-4129-9922-d267049e6d3c"
+    yor_trace            = "a794d606-1652-4129-9922-d267049e6d3c"
+    git_commit           = "3e5448669179260b6477fdc15f1d456ac89b8bc7"
+    git_file             = "terraform__modules__kms_keys__main_tf"
+    git_last_modified_at = "2021-10-19-15-57-20"
+    git_last_modified_by = "jonnyboniface"
+    git_modifiers        = "jonnyboniface"
+    git_org              = "jonathanrboniface"
+    git_repo             = "terraform-standards"
   }
 }

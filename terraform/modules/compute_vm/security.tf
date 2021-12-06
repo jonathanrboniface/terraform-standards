@@ -50,6 +50,13 @@ resource "google_network_management_connectivity_test" "to_vm" {
 
   protocol = lookup(var.connectivity_tests[each.value], "protocol", 0)
   labels = {
-    yor_trace = "5c7d73d9-8a57-4bd3-8028-154721e39690"
+    yor_trace            = "5c7d73d9-8a57-4bd3-8028-154721e39690"
+    git_commit           = "3e5448669179260b6477fdc15f1d456ac89b8bc7"
+    git_file             = "terraform__modules__compute_vm__security_tf"
+    git_last_modified_at = "2021-10-19-15-57-20"
+    git_last_modified_by = "jonnyboniface"
+    git_modifiers        = "jonnyboniface"
+    git_org              = "jonathanrboniface"
+    git_repo             = "terraform-standards"
   }
 }
