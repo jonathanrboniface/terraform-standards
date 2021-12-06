@@ -10,6 +10,10 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+      - name: Update coverage
+        run: |
+          git config --local user.email "jonny.boniface@rootleveltech.com"
+          git config --local user.name "Jonny Boniface"
       - name: Run yor action
         uses: bridgecrewio/yor-action@main
         with:
