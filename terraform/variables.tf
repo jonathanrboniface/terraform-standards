@@ -148,7 +148,11 @@ variable "kms_keys" {
     {
       stack     = "gcs_bucket"
       component = "buckets"
-    }
+    },
+    {
+      stack     = "gcs_bucket-2"
+      component = "buckets-2"
+    },
   ]
 }
 
@@ -208,7 +212,7 @@ variable "bucket_properties" {
       versioning_enabled          = false
       retention_policy            = []
       lifecycle_rules             = []
-      service_account_create      = true
+      service_account_create      = false
       service_account_name        = "bridgecrew-test"
       service_account_desc        = ""
       kms_key                     = ""
