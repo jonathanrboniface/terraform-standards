@@ -3,13 +3,50 @@ on:
   pull_request: 
 jobs:
   yor-job:
+    name: yor tagging
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        directory: ["./terraform"]
+        terraform-versions: [0.14.0]
+    defaults:
+      run:
+        working-directory: ${{ matrix.directory }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
           ref: ${{ github.head_ref }}
+
+      - name: Setup GCP Service Account 
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: 'latest'
+          service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          export_default_credentials: true
+
+
+      - name: Setup Terraform - ${{ matrix['terraform-versions'] }}
+        uses: hashicorp/setup-terraform@v1
+        with:
+          terraform_version: 0.14.0
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Update coverage
+        run: |
+          git config --local user.email "jonny.boniface@rootleveltech.com"
+          git config --local user.name "Jonny Boniface"
       - name: Run yor action
         uses: bridgecrewio/yor-action@main
         with:
@@ -20,4 +57,5 @@ jobs:
           log_level: DEBUG
           output_format: json
           commit_changes: YES
-
+      - name: Commit tag changes
+        uses: stefanzweifel/git-auto-commit-action@v4
