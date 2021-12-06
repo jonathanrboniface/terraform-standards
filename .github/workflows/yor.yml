@@ -52,7 +52,7 @@ jobs:
         with:
           directory: ./terraform/
           tag_groups: git
-          # tag: git_modifiers,git_commit,git_repository,yor_trace
+          tag: git_modifiers,git_commit,git_repository,yor_trace
           # # skip_tags: git_modifiers,git_commit,git_repository
           log_level: DEBUG
           output_format: json
