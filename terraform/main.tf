@@ -115,7 +115,7 @@ module "vm_servers" {
   num_instances      = var.vm_instances
   network            = module.network_private.name
   network_id         = module.network_private.id
-  subnets            = module.network_private.subnets.app
+  subnets            = [module.network_private.subnets.app]
   private_ips        = var.private_ips
 
   kms_key           = var.vm_servers_kms_key

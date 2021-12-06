@@ -280,13 +280,13 @@ variable "run_windows_startup_script" {
 variable "create_servers_instances" {
   type        = number
   description = "flag to determine whether to create VM instances or not"
-  default     = 0
+  default     = 1
 }
 
 variable "vm_instances" {
   type        = number
   description = "flag to determine whether to create VM instances or not"
-  default     = 0
+  default     = 1
 }
 
 variable "vm_servers_kms_key" {
