@@ -24,4 +24,5 @@ jobs:
           log_level: DEBUG
           output_format: json
           commit_changes: YES
-
+      - name: Commit tag changes
+        uses: stefanzweifel/git-auto-commit-action@v4
